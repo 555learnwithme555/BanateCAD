@@ -32,11 +32,15 @@ end
 function BiParametric.GetFaces(self)
 	local faces = {};
 
-	for w=0, self.WSteps-1 do
+	for w=0, self.WSteps-2 do
 		for u=0, self.USteps-1 do
+			local u1 = u + 1
+			if u == self.USteps-1 then
+				u1 = 0 -- last column connect to first column
+			end
 			local v1 = self:GetIndex(w, u, 0)
-			local v2 = self:GetIndex(w, u+1, 0)
-			local v3 = self:GetIndex(w+1, u+1, 0)
+			local v2 = self:GetIndex(w, u1, 0)
+			local v3 = self:GetIndex(w+1, u1, 0)
 			local v4 = self:GetIndex(w+1, u, 0)
 
 			local tri1 = {v1, v2, v3}
@@ -225,7 +229,6 @@ function BiParametric.GetMesh(self)
 	return amesh
 end
 
---[[
 function BiParametric.RenderBegin(self, graphPort)
 	if self.Transform ~= nil then
 		graphPort:SaveTransform()
@@ -249,7 +252,7 @@ function BiParametric.RenderEnd(self, graphPort)
 		graphPort:RestoreTransform()
 	end
 end
---]]
+
 function BiParametric.RenderSelf(self, graphPort)
 	if self.ShapeMesh == nil then
 		self.ShapeMesh = self:GetMesh()
@@ -257,7 +260,6 @@ function BiParametric.RenderSelf(self, graphPort)
 
 	graphPort:DisplayMesh(self.ShapeMesh);
 end
---[[
 
 function BiParametric.Render(self, graphPort)
 	-- From Actor
@@ -274,6 +276,5 @@ end
 function BiParametric.SetTransform(self, atrans)
 	self.Transform = atrans
 end
---]]
 
 return BiParametric
