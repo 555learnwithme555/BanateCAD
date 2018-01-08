@@ -1,0 +1,5 @@
+.vscode
+*.gcode
+*.mix
+*.stl
+*.xcf
