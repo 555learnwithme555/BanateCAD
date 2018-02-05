@@ -1,5 +1,5 @@
 local r = 30
-local h = 5
+local h = 3
 
 local heightsampler = ImageSampler({
 	Filename='moonInteriorMap.png',
