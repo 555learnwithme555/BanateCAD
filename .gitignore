@@ -1,5 +1,7 @@
 .vscode
+*.3mf
 *.gcode
+*.lnk
 *.mix
 *.stl
 *.xcf
