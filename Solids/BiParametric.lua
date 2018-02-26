@@ -32,7 +32,7 @@ end
 function BiParametric.GetFaces(self)
 	local faces = {};
 
-	for w=0, self.WSteps-2 do
+	for w=0, self.WSteps-1 do
 		for u=0, self.USteps-1 do
 			local u1 = u + 1
 			if u == self.USteps-1 then
