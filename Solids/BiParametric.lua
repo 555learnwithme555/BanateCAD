@@ -20,6 +20,8 @@ function BiParametric:_init(params)
 	self.ColorSampler = params.ColorSampler or nil
 	self.VertexFunction = params.VertexFunction or nil
 	self.Thickness = params.Thickness or nil
+	self.ThicknessMap = params.ThicknessMap or nil
+	self.MinThickness = params.MinThickness or 0
 end
 
 
@@ -73,9 +75,13 @@ function BiParametric.GetFaces(self)
 	-- to describe the inside faces
 	for w=0, self.WSteps-1 do
 		for u=0, self.USteps-1 do
+			local u1 = u + 1
+			if u == self.USteps-1 then
+				u1 = 0 -- last column connect to first column
+			end
 			local iv1 = self:GetIndex(w, u, offset)
-			local iv2 = self:GetIndex(w, u+1, offset)
-			local iv3 = self:GetIndex(w+1, u+1, offset)
+			local iv2 = self:GetIndex(w, u1, offset)
+			local iv3 = self:GetIndex(w+1, u1, offset)
 			local iv4 = self:GetIndex(w+1, u, offset)
 
 			local tri3 = {iv1, iv3, iv2}
@@ -107,9 +113,13 @@ function BiParametric.GetFaces(self)
 
 	-- Front Edge, u = 0,self.USteps-1, w=0
 	for col = 0, (self.USteps-1) do
+		local col1 = col + 1
+		if col == self.USteps-1 then
+			col1 = 0 -- last column connect to first column
+		end
 		local ffv1 = self:GetIndex(0,col, offset)
-		local ffv2 = self:GetIndex(0,col+1, offset)
-		local ffv3 = self:GetIndex(0,col+1, 0)
+		local ffv2 = self:GetIndex(0,col1, offset)
+		local ffv3 = self:GetIndex(0,col1, 0)
 		local ffv4 = self:GetIndex(0,col, 0)
 
 		local tri5 = {ffv1, ffv2, ffv3}
@@ -122,9 +132,13 @@ function BiParametric.GetFaces(self)
 
 	-- Back Edge, u = 0,self.USteps-1, w=self.WSteps
 	for col = 0, (self.USteps-1) do
+		local col1 = col + 1
+		if col == self.USteps-1 then
+			col1 = 0 -- last column connect to first column
+		end
 		local bfv1 = self:GetIndex(self.WSteps, col, offset)
-		local bfv2 = self:GetIndex(self.WSteps, col+1, offset)
-		local bfv3 = self:GetIndex(self.WSteps, col+1, 0)
+		local bfv2 = self:GetIndex(self.WSteps, col1, offset)
+		local bfv3 = self:GetIndex(self.WSteps, col1, 0)
 		local bfv4 = self:GetIndex(self.WSteps, col, 0)
 
 		local tri9 = {bfv1, bfv3, bfv2}
@@ -135,6 +149,7 @@ function BiParametric.GetFaces(self)
 		table.insert(faces, tri10)
 	end
 
+--[[
 	-- Right Edge, u = self.USteps, w=0, self.WSteps-1
 
 	for row=0, (self.WSteps-1) do
@@ -164,8 +179,9 @@ function BiParametric.GetFaces(self)
 		table.insert(faces, tri11)
 		table.insert(faces, tri12)
 	end
+--]]
 
-	return faces;
+return faces;
 end
 
 function BiParametric.GetVertex(self, u, w)
@@ -179,13 +195,16 @@ end
 function BiParametric.GetVertices(self)
 	local vertices = {};
 	local normals = {};
+	local thicks = {};
 
 	for w=0, self.WSteps do
 		for u=0, self.USteps do
 			local svert, normal = self:GetVertex(u/self.USteps, w/self.WSteps)
 			table.insert(vertices, vec.new(svert));
-			if normal ~= nil then
-				table.insert(normals, normal);
+			table.insert(normals, normal);
+			if self.ThicknessMap ~= nil then
+				local t = self.MinThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness);
+				table.insert(thicks, t);
 			end
 		end
 	end
@@ -203,7 +222,13 @@ function BiParametric.GetVertices(self)
 		for i=1,nverts do
 			local norm = normals[i]
 			local vert = vertices[i]
-			local nvert = vec3_add(vec3_mults(norm, self.Thickness), vert)
+			local nvert
+			if self.ThicknessMap ~= nil then
+				local thick = thicks[i]
+				nvert = vec3_add(vec3_mults(norm, thick), vert)
+			else
+				nvert = vec3_add(vec3_mults(norm, self.Thickness), vert)
+			end
 
 			table.insert(vertices, nvert)
 		end
