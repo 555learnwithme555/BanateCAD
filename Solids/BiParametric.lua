@@ -21,7 +21,7 @@ function BiParametric:_init(params)
 	self.VertexFunction = params.VertexFunction or nil
 	self.Thickness = params.Thickness or nil
 	self.ThicknessMap = params.ThicknessMap or nil
-	self.MinThickness = params.MinThickness or 0
+	self.BasicThickness = params.BasicThickness or 0
 end
 
 
@@ -203,7 +203,7 @@ function BiParametric.GetVertices(self)
 			table.insert(vertices, vec.new(svert));
 			table.insert(normals, normal);
 			if self.ThicknessMap ~= nil then
-				local t = self.MinThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness);
+				local t = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness);
 				table.insert(thicks, t);
 			end
 		end

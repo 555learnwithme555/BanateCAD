@@ -1,17 +1,10 @@
-local r = 36.1 -- 3 inches
---local r = 48.8 -- 4 inches
---local r = 61.5 -- 5 inches
---local r = 74.2 -- 6 inches
---local r = 86.9 -- 7 inches
---local r = 99.6 -- 8 inches
---local r = 112.3 -- 9 inches
---local r = 125.0 -- 10 inches
---local r = 137.7 -- 11 inches
---local r = 150.4 -- 12 inches
+local outputSize = 3 -- inches
+local extrudeSize = 0.4
 
-local h = 2 --bump map height
+local heightFactor = 1 -- bump map height factor
+local h = outputSize * heightFactor
+local r = ((outputSize * 25.4) / 2) - h
 local t = 2 --visual map thickness
-local mt = 0.4 --minimum thickness (extrude size)
 
 local heightmap = ImageSampler({
 	Filename = 'moonBumpMap.png',
@@ -40,7 +33,7 @@ local lshape =  BiParametric({
     VertexFunction = dispSampler,
 	Thickness = -t,
 	ThicknessMap = thicknessMap,
-	MinThickness = -mt,
+	BasicThickness = -extrudeSize,
 	})
 
 addshape(lshape)
