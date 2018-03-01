@@ -59,6 +59,18 @@ function STLASCIIWriter.WriteSTLVertex(self, v)
 	self.file:write(string.format("vertex %5.4f %5.4f %5.4f\n", v[1],v[2],v[3]));
 end
 
+function STLASCIIWriter.WriteBiParametric(self, shape, solidname)
+	self.file:write(string.format('solid %s\n',solidname));
+
+	local vs, _ = shape:GetVertices()
+	local fs = shape:GetFaces()
+	for _, f in ipairs(fs) do
+		local tri = {vs[f[1]], vs[f[2]], vs[f[3]]}
+		self:WriteFace(tri, f.normal);
+	end
+
+	self.file:write(string.format("endsolid %s\n", solidname));
+end
 
 
 

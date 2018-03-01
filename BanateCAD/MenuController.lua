@@ -115,9 +115,12 @@ print(f)
 		if (cmd.command == CADVM.TRIMESH) then
 			writer:WriteMesh(cmd.value, "BanateCAD")
 		elseif cmd.command == CADVM.SHAPE then
-			local amesh = cmd.value:GetMesh()
-			writer:WriteMesh(amesh, "BanateCAD")
-
+			if type(cmd.value == "BiParametric") then
+				writer:WriteBiParametric(cmd.value, "BiParametric")
+			else
+				local amesh = cmd.value:GetMesh()
+				writer:WriteMesh(amesh, "BanateCAD")
+			end
 		end
 	end
 
