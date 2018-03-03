@@ -56,7 +56,7 @@ function STLASCIIWriter.WriteFace(self, facet, normal)
 end
 
 function STLASCIIWriter.WriteSTLVertex(self, v)
-	self.file:write(string.format("vertex %5.4f %5.4f %5.4f\n", v[1],v[2],v[3]));
+	self.file:write(string.format("vertex %12.11f %12.11f %12.11f\n", v[1],v[2],v[3]));
 end
 
 function STLASCIIWriter.WriteBiParametric(self, shape, solidname)
