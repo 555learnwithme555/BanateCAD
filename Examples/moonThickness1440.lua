@@ -1,10 +1,10 @@
 local outputSize = 3 -- inches
 local extrudeSize = 0.4
 
-local heightFactor = 1 -- bump map height factor
+local heightFactor = 1.5 -- bump map height factor
 local h = outputSize * heightFactor
 local r = ((outputSize * 25.4) / 2) - h
-local t = 2 --visual map thickness
+local t = extrudeSize * 6 --visual map thickness
 
 local heightmap = ImageSampler({
 	Filename = 'moonBumpMap.png',
@@ -33,7 +33,7 @@ local lshape =  BiParametric({
     VertexFunction = dispSampler,
 	Thickness = -t,
 	ThicknessMap = thicknessMap,
-	BasicThickness = -extrudeSize,
+	BasicThickness = -(extrudeSize + 0.1), -- a little bit thicker
 	})
 
 --direct output to STL
