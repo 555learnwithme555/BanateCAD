@@ -35,9 +35,9 @@ function BiParametric.GetFaces(self)
 	local faces = {};
 
 	for w=0, self.WSteps-1 do
-		for u=0, self.USteps-1 do
+		for u=0, self.USteps do
 			local u1 = u + 1
-			if u == self.USteps-1 then
+			if u == self.USteps then
 				u1 = 0 -- last column connect to first column
 			end
 			local v1 = self:GetIndex(w, u, 0)
@@ -74,9 +74,9 @@ function BiParametric.GetFaces(self)
 	-- We should do a sanity check to ensure we have enough vertices
 	-- to describe the inside faces
 	for w=0, self.WSteps-1 do
-		for u=0, self.USteps-1 do
+		for u=0, self.USteps do
 			local u1 = u + 1
-			if u == self.USteps-1 then
+			if u == self.USteps then
 				u1 = 0 -- last column connect to first column
 			end
 			local iv1 = self:GetIndex(w, u, offset)
@@ -111,6 +111,7 @@ function BiParametric.GetFaces(self)
 
 	-- Create the edging faces
 
+--[[
 	-- Front Edge, u = 0,self.USteps-1, w=0
 	for col = 0, (self.USteps-1) do
 		local col1 = col + 1
@@ -149,7 +150,6 @@ function BiParametric.GetFaces(self)
 		table.insert(faces, tri10)
 	end
 
---[[
 	-- Right Edge, u = self.USteps, w=0, self.WSteps-1
 
 	for row=0, (self.WSteps-1) do
@@ -204,6 +204,10 @@ function BiParametric.GetVertices(self)
 			table.insert(normals, normal);
 			if self.ThicknessMap ~= nil then
 				local t = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness);
+				-- unique thickness at polar point
+				if (w == 0) or (w == self.WSteps) then
+					t = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness);
+				end
 				table.insert(thicks, t);
 			end
 		end
