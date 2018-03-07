@@ -38,11 +38,18 @@ function STLASCIIWriter.WriteMesh(self, mesh, solidname)
 end
 
 function STLASCIIWriter.WriteFace(self, facet, normal)
-	-- calculate the facet normal
-	local fnormal = {0,0,0};
-
 	-- header
-	self.file:write('facet normal  0 0 0\n');
+	if normal ~= nil then
+		self.file:write("facet normal ");
+		self.file:write(normal[1]);
+		self.file:write(" ");
+		self.file:write(normal[2]);
+		self.file:write(" ");
+		self.file:write(normal[3]);
+		self.file:write("\n");
+	else
+		self.file:write('facet normal 0 0 0\n');
+	end
 	self.file:write('outer loop\n');
 
 	-- print vertices
@@ -56,7 +63,14 @@ function STLASCIIWriter.WriteFace(self, facet, normal)
 end
 
 function STLASCIIWriter.WriteSTLVertex(self, v)
-	self.file:write(string.format("vertex %12.11f %12.11f %12.11f\n", v[1],v[2],v[3]));
+	-- self.file:write(string.format("vertex %.12f %.12f %.12f\n", v[1], v[2], v[3]));
+	self.file:write("vertex ");
+	self.file:write(v[1]);
+	self.file:write(" ");
+	self.file:write(v[2]);
+	self.file:write(" ");
+	self.file:write(v[3]);
+	self.file:write("\n");
 end
 
 function STLASCIIWriter.WriteBiParametric(self, shape, solidname)
