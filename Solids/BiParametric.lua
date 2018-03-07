@@ -35,9 +35,9 @@ function BiParametric.GetFaces(self)
 	local faces = {};
 
 	for w=0, self.WSteps-1 do
-		for u=0, self.USteps do
+		for u=0, self.USteps-1 do
 			local u1 = u + 1
-			if u == self.USteps then
+			if u == self.USteps-1 then
 				u1 = 0 -- last column connect to first column
 			end
 			local v1 = self:GetIndex(w, u, 0)
@@ -59,8 +59,12 @@ function BiParametric.GetFaces(self)
 			-- if a triangle is essentially non-existant, and
 			-- eliminate it from the list of faces
 			-- This happens at the poles of an ellipsoid for example
-			table.insert(faces, tri1)
-			table.insert(faces, tri2)
+			if (w > 0) then --dirty check south pole
+				table.insert(faces, tri1)
+			end
+			if w < (self.WSteps-1) then -- dirty check north pole
+				table.insert(faces, tri2)
+			end
 		end
 	end
 
@@ -74,9 +78,9 @@ function BiParametric.GetFaces(self)
 	-- We should do a sanity check to ensure we have enough vertices
 	-- to describe the inside faces
 	for w=0, self.WSteps-1 do
-		for u=0, self.USteps do
+		for u=0, self.USteps-1 do
 			local u1 = u + 1
-			if u == self.USteps then
+			if u == self.USteps-1 then
 				u1 = 0 -- last column connect to first column
 			end
 			local iv1 = self:GetIndex(w, u, offset)
@@ -103,14 +107,19 @@ function BiParametric.GetFaces(self)
 			-- if a triangle is essentially non-existant, and
 			-- eliminate it from the list of faces
 			-- This happens at the poles of an ellipsoid for example
+			if (w > 0) then -- dirty check south pole
 				table.insert(faces, tri3)
+			end
+			if w < (self.WSteps-1) then -- dirty check north pole
 				table.insert(faces, tri4)
+			end
 		end
 	end
 
 
 	-- Create the edging faces
 
+--dirty commented out, I think it should required if not generating full sphere
 --[[
 	-- Front Edge, u = 0,self.USteps-1, w=0
 	for col = 0, (self.USteps-1) do
@@ -144,7 +153,6 @@ function BiParametric.GetFaces(self)
 
 		local tri9 = {bfv1, bfv3, bfv2}
 		local tri10 = {bfv1, bfv4, bfv3}
-
 
 		table.insert(faces, tri9)
 		table.insert(faces, tri10)
