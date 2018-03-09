@@ -48,12 +48,15 @@ function GenerateMoon(outputSize, outputFilename)
 		Thickness = -t,
 		ThicknessMap = thicknessMap,
 		BasicThickness = -(extrudeSize + 0.1), -- a little bit thicker
-		})
+	})
 
 	--direct output to STL
-	local f= io.open(outputFilename, 'w+')
+	local f = io.open(outputFilename, 'w+')
 	local writer = STLASCIIWriter({file = f})
 	writer:WriteBiParametric(lshape, "BiParametric")
+	f:close()
+
+	collectgarbage();
 end
 
 GenerateMoon(2, 'Examples/moonLamp2inches.stl')
