@@ -8,7 +8,7 @@ HeadsUp - Primarily 2D of the same variety as the Processing environment
 
 ## Revised Version
 
-This revised version added an Moon model example.
+This is a special revised version tailor-made for modeling Moon Lamp.
 
 ![Prototype](https://cdn.instructables.com/F0J/XHYT/JCUULS1R/F0JXHYTJCUULS1R.RECTANGLE1.jpg)
 
