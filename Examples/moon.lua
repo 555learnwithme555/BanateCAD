@@ -5,6 +5,10 @@ heightsampler = ImageSampler({
 	Filename='moonBumpMap.png',
 })
 
+colorsampler = ImageSampler({
+	Filename='moonColorMap.png',
+})
+
 vertsampler = shape_ellipsoid({
 	XRadius = r,
 	ZRadius = r,
@@ -22,6 +26,7 @@ lshape =  BiParametric({
 	USteps = 720,
 	WSteps = 360,
 	VertexFunction=dispSampler,
-	})
+	ColorSampler = heightsampler,
+})
 
 addshape(lshape)
