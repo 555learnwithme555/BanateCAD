@@ -12,7 +12,7 @@ local appctx = BAppContext({
 	})
 require "BCADLanguage"
 
-function GenerateMoon(outputSize, outputFilename)
+function GenerateMoon(outputSize, outputName)
 	local extrudeSize = 0.4
 	local heightFactor = 1.5 -- bump map height factor
 	local shadowFactor = 3 -- larger is darker
@@ -51,20 +51,19 @@ function GenerateMoon(outputSize, outputFilename)
 	})
 
 	--direct output to STL
-	local f = io.open(outputFilename, 'w+')
+	local f = io.open('Examples/' .. outputName .. '.stl', 'w+')
 	local writer = STLASCIIWriter({file = f})
-	writer:WriteBiParametric(lshape, "BiParametric")
+	writer:WriteBiParametric(lshape, outputName)
 	f:close()
 
 	collectgarbage();
 end
 
-GenerateMoon(2, 'Examples/moonLamp2inches.stl')
-GenerateMoon(3, 'Examples/moonLamp3inches.stl')
-GenerateMoon(4, 'Examples/moonLamp4inches.stl')
-GenerateMoon(5, 'Examples/moonLamp5inches.stl')
-GenerateMoon(6, 'Examples/moonLamp6inches.stl')
-GenerateMoon(7, 'Examples/moonLamp7inches.stl')
-GenerateMoon(8, 'Examples/moonLamp6inches.stl')
-GenerateMoon(9, 'Examples/moonLamp9inches.stl')
-GenerateMoon(10, 'Examples/moonLamp10inches.stl')
+GenerateMoon(2, 'moonLamp2inches')
+GenerateMoon(3, 'moonLamp3inches')
+GenerateMoon(4, 'moonLamp4inches')
+GenerateMoon(5, 'moonLamp5inches')
+GenerateMoon(6, 'moonLamp6inches')
+GenerateMoon(7, 'moonLamp7inches')
+GenerateMoon(8, 'moonLamp8inches')
+GenerateMoon(9, 'moonLamp9inches')
