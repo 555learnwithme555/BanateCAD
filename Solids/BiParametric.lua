@@ -12,7 +12,7 @@ class.BiParametric(Shape)
 function BiParametric:_init(params)
 	params = params or {}		-- create object if user does not provide one
 
-	Shape._init(self, params);
+	Shape._init(self, params)
 
 
 	self.USteps = params.USteps or 10
@@ -24,6 +24,66 @@ function BiParametric:_init(params)
 	self.BasicThickness = params.BasicThickness or 0
 end
 
+function BiParametric.WriteFaces(self, writer)
+	for w=0, self.WSteps-1 do
+		local w1 = w + 1
+		for u=0, self.USteps-1 do
+			local u1
+			if u == self.USteps-1 then
+				u1 = 0 -- last column connect to first column
+			else
+				u1 = u + 1
+			end
+			local v1, n1 = self:GetVertex(u/self.USteps, w/self.WSteps)
+			local v2, n2 = self:GetVertex(u1/self.USteps, w/self.WSteps)
+			local v3, n3 = self:GetVertex(u1/self.USteps, w1/self.WSteps)
+			local v4, n4 = self:GetVertex(u/self.USteps, w1/self.WSteps)
+
+			if (w > 0) then --dirty check south pole
+				writer:WriteFace({v1, v2, v3}, nil)
+			end
+			if w < (self.WSteps-1) then -- dirty check north pole
+				writer:WriteFace({v1, v3, v4}, nil)
+			end
+
+			if self.Thickness ~= nil then
+				local iv1, iv2, iv3, iv4
+				if self.ThicknessMap ~= nil then
+					local t1, t2, t3, t4
+					if (w == 0) or (w == self.WSteps) then
+						t1 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness)
+						t2 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness)
+					else
+						t1 = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness)
+						t2 = self.BasicThickness + (self.ThicknessMap:GetHeight(u1/self.USteps, w/self.WSteps) * self.Thickness)
+					end
+					if (w1 == 0) or (w1 == self.WSteps) then
+						t3 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w1/self.WSteps) * self.Thickness)
+						t4 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w1/self.WSteps) * self.Thickness)
+					else
+						t3 = self.BasicThickness + (self.ThicknessMap:GetHeight(u1/self.USteps, w1/self.WSteps) * self.Thickness)
+						t4 = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w1/self.WSteps) * self.Thickness)
+					end
+					iv1 = vec3_add(vec3_mults(n1, t1), v1)
+					iv2 = vec3_add(vec3_mults(n2, t2), v2)
+					iv3 = vec3_add(vec3_mults(n3, t3), v3)
+					iv4 = vec3_add(vec3_mults(n4, t4), v4)
+				else
+					iv1 = vec3_add(vec3_mults(n1, self.Thickness), v1)
+					iv2 = vec3_add(vec3_mults(n2, self.Thickness), v2)
+					iv3 = vec3_add(vec3_mults(n3, self.Thickness), v3)
+					iv4 = vec3_add(vec3_mults(n4, self.Thickness), v4)
+				end
+				if (w > 0) then --dirty check south pole
+					writer:WriteFace({iv1, iv3, iv2}, nil)
+				end
+				if w < (self.WSteps-1) then -- dirty check north pole
+					writer:WriteFace({iv1, iv4, iv3}, nil)
+				end
+			end
+		end
+	end
+end
 
 -- row == 0, WSteps+1
 -- column == 0, USteps+1
@@ -32,7 +92,7 @@ function BiParametric.GetIndex(self, row, column, offset)
 end
 
 function BiParametric.GetFaces(self)
-	local faces = {};
+	local faces = {}
 
 	for w=0, self.WSteps-1 do
 		for u=0, self.USteps-1 do
@@ -189,7 +249,7 @@ function BiParametric.GetFaces(self)
 	end
 --]]
 
-return faces;
+return faces
 end
 
 function BiParametric.GetVertex(self, u, w)
@@ -201,22 +261,24 @@ function BiParametric.GetVertex(self, u, w)
 end
 
 function BiParametric.GetVertices(self)
-	local vertices = {};
-	local normals = {};
-	local thicks = {};
+	local vertices = {}
+	local normals = {}
+	local thicks = {}
 
 	for w=0, self.WSteps do
 		for u=0, self.USteps do
 			local svert, normal = self:GetVertex(u/self.USteps, w/self.WSteps)
-			table.insert(vertices, vec.new(svert));
-			table.insert(normals, normal);
+			table.insert(vertices, vec.new(svert))
+			table.insert(normals, normal)
 			if self.ThicknessMap ~= nil then
-				local t = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness);
+				local t
 				-- unique thickness at polar point
 				if (w == 0) or (w == self.WSteps) then
-					t = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness);
+					t = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness)
+				else
+					t = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness)
 				end
-				table.insert(thicks, t);
+				table.insert(thicks, t)
 			end
 		end
 	end
@@ -246,11 +308,11 @@ function BiParametric.GetVertices(self)
 		end
 	end
 
-	return vertices, normals;
+	return vertices, normals
 end
 
 function BiParametric.GetMesh(self)
-	local amesh = trimesh();
+	local amesh = trimesh()
 
 	self.Vertices, self.Normals = self:GetVertices()
 
@@ -295,7 +357,7 @@ function BiParametric.RenderSelf(self, graphPort)
 		self.ShapeMesh = self:GetMesh()
 	end
 
-	graphPort:DisplayMesh(self.ShapeMesh);
+	graphPort:DisplayMesh(self.ShapeMesh)
 end
 
 function BiParametric.Render(self, graphPort)
