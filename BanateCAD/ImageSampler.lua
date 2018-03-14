@@ -8,6 +8,7 @@ function ImageSampler:_init(params)
 	params = params or {}
 
 	self.Image = params.Image or nil
+	self.Blur = params.Blur or nil
 
 	if params.Image == nil then
 		self.Filename = params.Filename or nil
@@ -29,13 +30,32 @@ end
 function ImageSampler.GetColor(self, u, w)
 	local width,height = self.Image:sizeXY()
 	-- calculate pixel coordinates
-	local x = u*(width-1)
-	local y = (height-1)-(w*(height-1))
+	local x = math.floor(u*(width-1))
+	local y = math.floor((height-1)-(w*(height-1)))
 
 	local pixel = self.Image:getPixel(x,y)
 	local r = self.Image:red(pixel)
 	local g = self.Image:green(pixel)
 	local b = self.Image:blue(pixel)
+	if self.Blur ~= nil then
+		local i = 1
+		for dx = x - self.Blur, x + self.Blur do
+			if (dx >= 0) and (dx < width) then
+				for dy = y - self.Blur, y - self.Blur do
+					if (dy >= 0) and (dy < height) then
+						pixel = self.Image:getPixel(dx, dy)
+						r = r + self.Image:red(pixel)
+						g = g + self.Image:green(pixel)
+						b = b + self.Image:blue(pixel)
+						i = i + 1
+					end
+				end
+			end
+		end
+		r = r / i
+		g = g / i
+		b = b / i
+	end
 
 	return {r/255,g/255,b/255,1}
 end
