@@ -52,7 +52,7 @@ function GenerateMoon(outputSize, outputName)
 		VertexFunction = dispSampler,
 		Thickness = -t,
 		ThicknessMap = thicknessMap,
-		BasicThickness = -(extrudeSize + 0.1), -- a little bit thicker
+		BasicThickness = -(extrudeSize + 0.4), -- a little bit thicker
 	})
 
 	--direct output to STL
