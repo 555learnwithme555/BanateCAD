@@ -23,12 +23,12 @@ function GenerateMoon(outputSize, outputName)
 
 	local heightmap = ImageSampler({
 		Filename = 'Examples/moonBumpPlusVisualMap.png',
-		Blur = 1,
+		-- Blur = 1,
 	})
 
 	local thicknessMap = ImageSampler({
 		Filename = 'Examples/moonInvertedVisualMap.png',
-		Blur = 1,
+		Blur = 4, -- smoothen internal surface
 	})
 
 	local vertsampler = shape_ellipsoid({
@@ -52,7 +52,7 @@ function GenerateMoon(outputSize, outputName)
 		VertexFunction = dispSampler,
 		Thickness = -t,
 		ThicknessMap = thicknessMap,
-		BasicThickness = -(extrudeSize + 0.4), -- a little bit thicker
+		BasicThickness = -(extrudeSize + 0.5), -- a little bit thicker
 	})
 
 	--direct output to STL
@@ -64,11 +64,11 @@ function GenerateMoon(outputSize, outputName)
 	collectgarbage()
 end
 
-GenerateMoon(2, 'moonLamp2inches')
-GenerateMoon(3, 'moonLamp3inches')
+-- GenerateMoon(2, 'moonLamp2inches')
+-- GenerateMoon(3, 'moonLamp3inches')
 GenerateMoon(4, 'moonLamp4inches')
-GenerateMoon(5, 'moonLamp5inches')
-GenerateMoon(6, 'moonLamp6inches')
-GenerateMoon(7, 'moonLamp7inches')
-GenerateMoon(8, 'moonLamp8inches')
-GenerateMoon(9, 'moonLamp9inches')
+-- GenerateMoon(5, 'moonLamp5inches')
+-- GenerateMoon(6, 'moonLamp6inches')
+-- GenerateMoon(7, 'moonLamp7inches')
+-- GenerateMoon(8, 'moonLamp8inches')
+-- GenerateMoon(9, 'moonLamp9inches')
