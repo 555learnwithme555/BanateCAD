@@ -23,7 +23,7 @@ function GenerateMoon(outputSize, outputName)
 
 	local heightmap = ImageSampler({
 		Filename = 'Examples/moonBumpPlusVisualMap.png',
-		-- Blur = 1,
+		Blur = 1,
 	})
 
 	local thicknessMap = ImageSampler({
@@ -48,7 +48,7 @@ function GenerateMoon(outputSize, outputName)
 	-- 	USteps = 1440,
 	-- 	WSteps = 720,
 	local lshape =  Icosahedron({
-		RefinementSteps = 9,
+		RefinementLevel = 200,
 		VertexFunction = dispSampler,
 		Thickness = -t,
 		ThicknessMap = thicknessMap,
