@@ -1,33 +1,33 @@
 local r = 30 -- radius
 local h = 3 -- height
 
-heightsampler = ImageSampler({
+local heightsampler = ImageSampler({
 	Filename = 'moonBumpMap.png',
 })
 
 -- optional
-colorsampler = ImageSampler({
+local colorsampler = ImageSampler({
 	Filename = 'moonColorMap.png',
 })
 
-vertsampler = shape_ellipsoid({
+local vertsampler = shape_ellipsoid({
 	XRadius = r,
 	ZRadius = r,
 	MaxTheta = math.rad(360),
 	MaxPhi = math.rad(180),
 })
 
-dispSampler = DisplacementSampler({
+local dispSampler = DisplacementSampler({
 	VertexSampler = vertsampler,
 	HeightSampler = heightsampler,
 	MaxHeight = h,
 })
 
-lshape =  BiParametric({
+local lshape =  BiParametric({
 	USteps = 720,
 	WSteps = 360,
 	VertexFunction = dispSampler,
-	ColorSampler = heightsampler, -- optional
+	ColorSampler = colorsampler, -- optional
 })
 
 addshape(lshape)
