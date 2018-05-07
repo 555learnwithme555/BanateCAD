@@ -29,9 +29,9 @@ function Icosahedron.WriteFace(self, writer, u1, w1, u2, w2, u3, w3)
 		local iv1, iv2, iv3
 		if self.ThicknessMap ~= nil then
 			local t1, t2, t3
-			t1 = self.BasicThickness + (self.ThicknessMap:GetHeight(u1, w1) * self.Thickness)
-			t2 = self.BasicThickness + (self.ThicknessMap:GetHeight(u2, w2) * self.Thickness)
-			t3 = self.BasicThickness + (self.ThicknessMap:GetHeight(u3, w3) * self.Thickness)
+			t1 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u1, w1)) * self.Thickness)
+			t2 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u2, w2)) * self.Thickness)
+			t3 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u3, w3)) * self.Thickness)
 
 			iv1 = vec3_add(vec3_mults(n1, t1), v1)
 			iv2 = vec3_add(vec3_mults(n2, t2), v2)

@@ -15,20 +15,21 @@ require "Icosahedron"
 
 function GenerateMoon(outputSize, outputName)
 	local extrudeSize = 0.4
-	local heightFactor = 1.5 -- bump map height factor
-	local shadowFactor = 3 -- larger is darker
+	local heightFactor = 1.2 -- bump map height factor
+	local shadowFactor = 3.6 -- larger is darker
+	local refinementLevel = 288 -- output resolution
 	local h = outputSize * heightFactor
 	local r = ((outputSize * 25.4) / 2) - (h / 2)
-	local t = extrudeSize * shadowFactor --visual map thickness
+	local t = extrudeSize * shadowFactor --color map thickness
 
 	local heightmap = ImageSampler({
-		Filename = 'Examples/moonBumpPlusVisualMap.png',
-		Blur = 1,
+		Filename = 'Examples/moonBumpPlusColorMap.png',
+		-- Blur = 1,
 	})
 
 	local thicknessMap = ImageSampler({
-		Filename = 'Examples/moonInvertedVisualMap.png',
-		Blur = 4, -- smoothen internal surface
+		Filename = 'Examples/moonColorMap.png',
+		-- Blur = 4, -- smoothen internal surface
 	})
 
 	local vertsampler = shape_ellipsoid({
@@ -44,11 +45,11 @@ function GenerateMoon(outputSize, outputName)
 		MaxHeight = h,
 	})
 
+	local lshape =  Icosahedron({
+		RefinementLevel = refinementLevel,
 	-- local lshape =  BiParametric({
 	-- 	USteps = 1440,
 	-- 	WSteps = 720,
-	local lshape =  Icosahedron({
-		RefinementLevel = 288,
 		VertexFunction = dispSampler,
 		Thickness = -t,
 		ThicknessMap = thicknessMap,
@@ -62,11 +63,23 @@ function GenerateMoon(outputSize, outputName)
 	f:close()
 
 	collectgarbage()
+
+	-- local lshape =  Icosahedron({
+	-- 	RefinementLevel = refinementLevel,
+	-- 	VertexFunction = dispSampler,
+	-- })
+
+	-- local f = io.open('Examples/' .. outputName .. 'OuterOnly.stl', 'w+')
+	-- local writer = STLASCIIWriter({file = f})
+	-- writer:WriteBiParametric(lshape, outputName)
+	-- f:close()
+
+	-- collectgarbage()
 end
 
 -- GenerateMoon(2, 'moonLamp2inches')
--- GenerateMoon(3, 'moonLamp3inches')
-GenerateMoon(4, 'moonLamp4inches')
+GenerateMoon(3, 'moonLamp3inches')
+-- GenerateMoon(4, 'moonLamp4inches')
 -- GenerateMoon(5, 'moonLamp5inches')
 -- GenerateMoon(6, 'moonLamp6inches')
 -- GenerateMoon(7, 'moonLamp7inches')

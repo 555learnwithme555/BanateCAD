@@ -51,18 +51,18 @@ function BiParametric.WriteFaces(self, writer)
 				if self.ThicknessMap ~= nil then
 					local t1, t2, t3, t4
 					if (w == 0) or (w == self.WSteps) then
-						t1 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness)
-						t2 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness)
+						t1 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(0, w/self.WSteps)) * self.Thickness)
+						t2 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(0, w/self.WSteps)) * self.Thickness)
 					else
-						t1 = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness)
-						t2 = self.BasicThickness + (self.ThicknessMap:GetHeight(u1/self.USteps, w/self.WSteps) * self.Thickness)
+						t1 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps)) * self.Thickness)
+						t2 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u1/self.USteps, w/self.WSteps)) * self.Thickness)
 					end
 					if (w1 == 0) or (w1 == self.WSteps) then
-						t3 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w1/self.WSteps) * self.Thickness)
-						t4 = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w1/self.WSteps) * self.Thickness)
+						t3 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(0, w1/self.WSteps)) * self.Thickness)
+						t4 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(0, w1/self.WSteps)) * self.Thickness)
 					else
-						t3 = self.BasicThickness + (self.ThicknessMap:GetHeight(u1/self.USteps, w1/self.WSteps) * self.Thickness)
-						t4 = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w1/self.WSteps) * self.Thickness)
+						t3 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u1/self.USteps, w1/self.WSteps)) * self.Thickness)
+						t4 = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u/self.USteps, w1/self.WSteps)) * self.Thickness)
 					end
 					iv1 = vec3_add(vec3_mults(n1, t1), v1)
 					iv2 = vec3_add(vec3_mults(n2, t2), v2)
@@ -274,9 +274,9 @@ function BiParametric.GetVertices(self)
 				local t
 				-- unique thickness at polar point
 				if (w == 0) or (w == self.WSteps) then
-					t = self.BasicThickness + (self.ThicknessMap:GetHeight(0, w/self.WSteps) * self.Thickness)
+					t = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(0, w/self.WSteps)) * self.Thickness)
 				else
-					t = self.BasicThickness + (self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps) * self.Thickness)
+					t = self.BasicThickness + ((1 - self.ThicknessMap:GetHeight(u/self.USteps, w/self.WSteps)) * self.Thickness)
 				end
 				table.insert(thicks, t)
 			end
