@@ -15,12 +15,12 @@ require "Icosahedron"
 
 function GenerateMoon(outputSize, outputName)
 	local extrudeSize = 0.4
-	local heightFactor = 1.6 -- bump map height factor
-	local shadowFactor = 4.8 -- larger is darker
+	local heightFactor = 0.25 -- bump map height factor
+	local shadowFactor = 0.75 -- larger is darker
 	local refinementLevel = 288 -- output resolution
 	local h = outputSize * heightFactor
 	local r = ((outputSize * 25.4) / 2) - (h / 2)
-	local t = extrudeSize * shadowFactor --color map thickness
+	local t = outputSize * shadowFactor --color map thickness
 
 	local heightmap = ImageSampler({
 		Filename = 'Examples/moonBumpMultiplyColorMap.png',
