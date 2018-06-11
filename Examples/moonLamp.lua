@@ -1,10 +1,10 @@
 local outputSize = 3 -- inches
 local extrudeSize = 0.4
 
-local heightFactor = 0.25 -- bump map height factor
-local shadowFactor = 0.75 -- larger is darker
+local heightFactor = 0.3 -- bump map height factor
+local shadowFactor = 0.8 -- larger is darker
 local h = outputSize * heightFactor
-local r = ((outputSize * 25.4) / 2) - h
+local r = ((outputSize * 25.4) / 2) - (h /2)
 local t = outputSize * shadowFactor --color map thickness
 
 local heightmap = ImageSampler({

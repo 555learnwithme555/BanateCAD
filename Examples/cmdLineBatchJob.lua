@@ -13,17 +13,20 @@ local appctx = BAppContext({
 require "BCADLanguage"
 require "Icosahedron"
 
-function GenerateMoon(outputSize, outputName)
+function GenerateMoon(outputSize, outputName, genOuterSTL)
 	local extrudeSize = 0.4
-	local heightFactor = 0.25 -- bump map height factor
-	local shadowFactor = 0.75 -- larger is darker
-	local refinementLevel = 288 -- output resolution
+	-- local heightFactor = 0.3 -- bump map height factor
+	local heightFactor = 0.6 -- double value for moonBumpAddInvertedColorMap
+	local shadowFactor = 0.8 -- larger is darker
+	local refinementLevel = 144 -- output resolution
 	local h = outputSize * heightFactor
 	local r = ((outputSize * 25.4) / 2) - (h / 2)
 	local t = outputSize * shadowFactor --color map thickness
 
 	local heightmap = ImageSampler({
-		Filename = 'Examples/moonBumpMultiplyColorMap.png',
+		-- Filename = 'Examples/moonBumpMap.png',
+		-- Filename = 'Examples/moonBumpMultiplyInvertedColorMap.png',
+		Filename = 'Examples/moonBumpAddInvertedColorMap.png',
 		-- Blur = 1,
 	})
 
@@ -48,8 +51,8 @@ function GenerateMoon(outputSize, outputName)
 	local lshape =  Icosahedron({
 		RefinementLevel = refinementLevel,
 	-- local lshape =  BiParametric({
-	-- 	USteps = 1440,
-	-- 	WSteps = 720,
+	-- 	USteps = refinementLevel * 10,
+	-- 	WSteps = refinementLevel * 5,
 		VertexFunction = dispSampler,
 		Thickness = -t,
 		ThicknessMap = thicknessMap,
@@ -64,24 +67,27 @@ function GenerateMoon(outputSize, outputName)
 
 	collectgarbage()
 
-	-- local lshape =  Icosahedron({
-	-- 	RefinementLevel = refinementLevel,
-	-- 	VertexFunction = dispSampler,
-	-- })
+	if genOuterSTL then
+		-- generate the outer surface only object for post edit purpose
+		local lshape =  Icosahedron({
+			RefinementLevel = refinementLevel,
+			VertexFunction = dispSampler,
+		})
 
-	-- local f = io.open('Examples/' .. outputName .. 'OuterOnly.stl', 'w+')
-	-- local writer = STLASCIIWriter({file = f})
-	-- writer:WriteBiParametric(lshape, outputName)
-	-- f:close()
+		local f = io.open('Examples/' .. outputName .. 'OuterOnly.stl', 'w+')
+		local writer = STLASCIIWriter({file = f})
+		writer:WriteBiParametric(lshape, outputName)
+		f:close()
 
-	-- collectgarbage()
+		collectgarbage()
+	end
 end
 
--- GenerateMoon(2, 'moonLamp2inches')
-GenerateMoon(3, 'moonLamp3inches')
--- GenerateMoon(4, 'moonLamp4inches')
--- GenerateMoon(5, 'moonLamp5inches')
--- GenerateMoon(6, 'moonLamp6inches')
--- GenerateMoon(7, 'moonLamp7inches')
--- GenerateMoon(8, 'moonLamp8inches')
--- GenerateMoon(9, 'moonLamp9inches')
+-- GenerateMoon(2, 'moonLamp2inches', false)
+-- GenerateMoon(3, 'moonLamp3inches', false)
+-- GenerateMoon(4, 'moonLamp4inches', false)
+GenerateMoon(5, 'moonLamp5inches', true)
+-- GenerateMoon(6, 'moonLamp6inches', false)
+-- GenerateMoon(7, 'moonLamp7inches', false)
+-- GenerateMoon(8, 'moonLamp8inches', false)
+-- GenerateMoon(9, 'moonLamp9inches', false)
