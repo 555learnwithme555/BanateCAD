@@ -17,11 +17,11 @@ function GenerateMoon(outputSize, outputName, genOuterSTL)
 	local extrudeSize = 0.4
 	-- local heightFactor = 0.3 -- bump map height factor
 	local heightFactor = 0.6 -- double value for moonBumpAddInvertedColorMap
-	local shadowFactor = 0.8 -- larger is darker
+	local shadowFactor = 4 -- larger is darker
 	local refinementLevel = 144 -- output resolution
 	local h = outputSize * heightFactor
 	local r = ((outputSize * 25.4) / 2) - (h / 2)
-	local t = outputSize * shadowFactor --color map thickness
+	local t = extrudeSize * shadowFactor --color map thickness
 
 	local heightmap = ImageSampler({
 		-- Filename = 'Examples/moonBumpMap.png',
@@ -83,10 +83,10 @@ function GenerateMoon(outputSize, outputName, genOuterSTL)
 	end
 end
 
--- GenerateMoon(2, 'moonLamp2inches', false)
+GenerateMoon(2, 'moonLamp2inches', false)
 -- GenerateMoon(3, 'moonLamp3inches', false)
 -- GenerateMoon(4, 'moonLamp4inches', false)
-GenerateMoon(5, 'moonLamp5inches', true)
+-- GenerateMoon(5, 'moonLamp5inches', true)
 -- GenerateMoon(6, 'moonLamp6inches', false)
 -- GenerateMoon(7, 'moonLamp7inches', false)
 -- GenerateMoon(8, 'moonLamp8inches', false)
