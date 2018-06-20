@@ -16,7 +16,7 @@ require "Icosahedron"
 function GenerateMoon(outputSize, outputName, genOuterSTL)
 	local extrudeSize = 0.4
 	-- local heightFactor = 0.3 -- bump map height factor
-	local heightFactor = 0.6 -- double value for moonBumpAddInvertedColorMap
+	local heightFactor = 0.8 -- double value for moonBumpAddInvertedColorMap
 	local shadowFactor = 4 -- larger is darker
 	local refinementLevel = 144 -- output resolution
 	local h = outputSize * heightFactor
