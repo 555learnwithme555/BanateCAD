@@ -10,8 +10,12 @@ local appctx = BAppContext({
 		"core",			-- Guts of the system
 		}
 	})
-require "BCADLanguage"
+require "ImageSampler"
+require "DisplacementSampler"
+require "Vector"
+require "STLCodec"
 require "Icosahedron"
+require "shape_ellipsoid"
 
 function GenerateMoon(outputSize, outputName, genOuterSTL)
 	local extrudeSize = 0.4

@@ -1,4 +1,4 @@
-require("gd")
+local gd = require("gd")
 
 local class = require "pl.class"
 
