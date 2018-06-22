@@ -31,12 +31,14 @@ function GenerateMoon(outputSize, outputName, genOuterSTL)
 		-- Filename = 'Examples/moonBumpMap.png',
 		-- Filename = 'Examples/moonBumpMultiplyInvertedColorMap.png',
 		Filename = 'Examples/moonBumpAddInvertedColorMap.png',
-		-- Blur = 1,
+		Interpolate = true,
+		-- Blur = 1, -- smoothen surface
 	})
 
 	local thicknessMap = ImageSampler({
 		Filename = 'Examples/moonColorMap.png',
-		-- Blur = 4, -- smoothen internal surface
+		Interpolate = true,
+		-- Blur = 1, -- smoothen interior shape
 	})
 
 	local vertsampler = shape_ellipsoid({
