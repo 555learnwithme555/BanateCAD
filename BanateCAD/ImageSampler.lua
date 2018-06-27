@@ -73,27 +73,34 @@ end
 
 function ImageSampler.GetHeight(self, u, w)
 	-- calculate pixel coordinates
-	local xf = u*(self.Width-1)
-	local yf = (self.Height-1)-(w*(self.Height-1)) -- flipped
+	local xf = u * self.Width
+	local yf = (1 - w) * self.Height -- flipped
+	if yf == self.Height then
+		yf = 0 -- loop back 1 to 0
+	end
 
 	local x = math.floor(xf)
 	local y = math.floor(yf)
+	local xdp = xf - x
+	local ydp = yf - y
 
 	local x1 = loopValue(x + 1, self.Width - 1)
 	local y1 = loopValue(y + 1, self.Height - 1)
 
 	if self.Interpolate then
-		-- print(u,x,interpolate(x,x1,(xf - x)),w,y,interpolate(y,y1,(yf - y)))
+		-- print(u,x,interpolate(x,x1,xdp),w,y,interpolate(y,y1,ydp))
 		return interpolate(
 						interpolate(
 							self:GetPixelHeight(x,y),
 							self:GetPixelHeight(x1,y),
-							(xf - x)),
+							xdp
+						),
 						interpolate(
 							self:GetPixelHeight(x,y1),
 							self:GetPixelHeight(x1,y1),
-							(xf - x)),
-						(yf - y)
+							xdp
+						),
+						ydp
 					)
 	else
 		return self:GetPixelHeight(x,y)
