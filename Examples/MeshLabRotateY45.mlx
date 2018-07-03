@@ -7,7 +7,7 @@
   <Param type="RichBool" value="false" name="snapFlag"/>
   <Param x="0" y="0" z="0" type="RichPoint3f" name="customAxis"/>
   <Param x="0" y="0" z="0" type="RichPoint3f" name="customCenter"/>
-  <Param type="RichFloat" value="45" name="snapAngle"/>
+  <Param type="RichFloat" value="30" name="snapAngle"/>
   <Param type="RichBool" value="true" name="Freeze"/>
   <Param type="RichBool" value="false" name="ToAll"/>
  </filter>
